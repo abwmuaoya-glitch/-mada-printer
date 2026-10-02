@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<manifest xmlns:android="http://android.com"
     package="com.madaprinter">
 
-    <!-- صلاحيات الإنترنت والطباعة الأساسية -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.BIND_PRINT_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -13,10 +10,8 @@
         android:label="MadaPrinter"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        tools:replace="android:allowBackup">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-        <!-- النشاط الرئيسي للتطبيق الذي يفتح عند التشغيل -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -26,19 +21,5 @@
             </intent-filter>
         </activity>
 
-        <!-- تعريف خدمة الطباعة PrintJobService بالشكل الصحيح داخل أندرويد -->
-        <service
-            android:name=".PrintJobService"
-            android:permission="android.permission.BIND_PRINT_SERVICE"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.printservice.PrintService" />
-            </intent-filter>
-            <meta-data
-                android:name="android.printservice"
-                android:resource="@xml/print_service" />
-        </service>
-
     </application>
-
 </manifest>
