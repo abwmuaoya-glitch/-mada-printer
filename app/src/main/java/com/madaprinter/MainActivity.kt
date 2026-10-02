@@ -179,6 +179,29 @@ layout.addView(devices)updateTrial()
             "المهام المجانية المتبقية: $remaining من 10"
         } else {
             "انتهت التجربة. اختر خطة تفعيل."
+        }private fun showPlans() {
+    val plans = arrayOf(
+        "تفعيل يومي",
+        "اشتراك شهري",
+        "اشتراك سنوي",
+        "تفعيل مدى الحياة"
+    )
+
+    android.app.AlertDialog.Builder(this)
+        .setTitle("اختر خطة التفعيل")
+        .setItems(plans) { _, which ->
+            val selected = plans[which]
+
+            android.app.AlertDialog.Builder(this)
+                .setTitle(selected)
+                .setMessage(
+                    "سيتم توفير الدفع والتفعيل لهذه الخطة لاحقًا."
+                )
+                .setPositiveButton("حسنًا", null)
+                .show()
+        }
+        .setNegativeButton("إلغاء", null)
+        .show()
         }
     }
 
