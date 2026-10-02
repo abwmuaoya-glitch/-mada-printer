@@ -70,35 +70,19 @@ class MainActivity : Activity() {
 
         val refresh = Button(this).apply {
             text = "تحديث الطابعات"
-            setOnClickListener {
-                requestBluetoothPermission()
-            }
-        }
-
-        val plansButton = Button(this).apply {
-            text = "خطط التفعيل والاشتراك"
-            setOnClickListener {
-                showPlans()
-            }
-        }
+            setOnClickListener { loadDevices() }
+        }val plansButton = Button(this).apply {
+    text = "خطط التفعيل والاشتراك"
+    setOnClickListener {
+        showPlans()
+    }
 
         devices = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
         }
-
-        layout.addView(title)
-        layout.addView(status)
-        layout.addView(trial)
-        layout.addView(pairButton)
-        layout.addView(printSettings)
-        layout.addView(refresh)
-        layout.addView(plansButton)
-        layout.addView(devices)
-
-        setContentView(layout)
-
-        updateTrial()
-        requestBluetoothPermission()
+layout.addView(refresh)
+layout.addView(plansButton)
+layout.addView(devices)updateTrial()
     }
 
     private fun requestBluetoothPermission() {
@@ -196,31 +180,6 @@ class MainActivity : Activity() {
         } else {
             "انتهت التجربة. اختر خطة تفعيل."
         }
-    }
-
-    private fun showPlans() {
-        val plans = arrayOf(
-            "تفعيل يومي",
-            "اشتراك شهري",
-            "اشتراك سنوي",
-            "تفعيل مدى الحياة"
-        )
-
-        android.app.AlertDialog.Builder(this)
-            .setTitle("اختر خطة التفعيل")
-            .setItems(plans) { _, which ->
-                val selected = plans[which]
-
-                android.app.AlertDialog.Builder(this)
-                    .setTitle(selected)
-                    .setMessage(
-                        "سيتم توفير الدفع والتفعيل لهذه الخطة لاحقًا."
-                    )
-                    .setPositiveButton("حسنًا", null)
-                    .show()
-            }
-            .setNegativeButton("إلغاء", null)
-            .show()
     }
 
     override fun onResume() {
