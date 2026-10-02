@@ -14,12 +14,22 @@ class PrintJobService : PrintService() {
     }
 
     override fun onPrintJobQueued(printJob: PrintJob) {
+        val trialManager = TrialManager(this)
+
+        if (!trialManager.canPrint()) {
+            printJob.fail(
+                "انتهت المهام المجانية العشر. يرجى تفعيل التطبيق."
+            )
+            return
+        }
+
         printJob.start()
 
-        // سيتم إضافة معالجة المستند
-        // والاتصال بالطابعة في الخطوة التالية.
+        // الطباعة الفعلية لم تكتمل بعد.
+        // لا نسجل المهمة المجانية قبل نجاح الطباعة.
+
         printJob.fail(
-            "خدمة الطباعة قيد الإعداد. لم تتم الطباعة بعد."
+            "خدمة الطباعة قيد الإعداد. لم تتم الطباعة."
         )
     }
 
@@ -32,9 +42,7 @@ class PrintJobService : PrintService() {
 
         override fun onStartPrinterDiscovery(
             priorityList: MutableList<PrinterId>
-        ) {
-            // سيتم إضافة اكتشاف الطابعات لاحقًا.
-        }
+        ) {}
 
         override fun onStopPrinterDiscovery() {}
 
