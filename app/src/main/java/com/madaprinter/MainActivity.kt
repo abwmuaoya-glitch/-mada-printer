@@ -71,26 +71,18 @@ class MainActivity : Activity() {
         val refresh = Button(this).apply {
             text = "تحديث الطابعات"
             setOnClickListener { loadDevices() }
-        }
+        }val plansButton = Button(this).apply {
+    text = "خطط التفعيل والاشتراك"
+    setOnClickListener {
+        showPlans()
+    }
 
         devices = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
         }
-
-        layout.addView(title)
-        layout.addView(status)
-        layout.addView(trial)
-        layout.addView(pairButton)
-        layout.addView(printSettings)
-        layout.addView(refresh)
-        layout.addView(devices)
-
-        setContentView(ScrollView(this).apply {
-            addView(layout)
-        })
-
-        requestBluetoothPermission()
-        updateTrial()
+layout.addView(refresh)
+layout.addView(plansButton)
+layout.addView(devices)updateTrial()
     }
 
     private fun requestBluetoothPermission() {
