@@ -3,15 +3,19 @@ package com.madaprinter
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.Gravity
-import android.widget.*
-import android.graphics.Color
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 
 class MainActivity : Activity() {
 
@@ -22,9 +26,17 @@ class MainActivity : Activity() {
     private lateinit var devices: LinearLayout
     private lateinit var trial: TextView
 
+    private val bluetoothPermissionCode = 100
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        createInterface()
+        updateTrial()
+        requestBluetoothPermission()
+    }
+
+    private fun createInterface() {
         val layout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(28, 35, 28, 20)
@@ -39,6 +51,7 @@ class MainActivity : Activity() {
         }
 
         status = TextView(this).apply {
+            text = "جاري التحقق من البلوتوث..."
             textSize = 16f
             gravity = Gravity.CENTER
             setPadding(0, 20, 0, 20)
@@ -48,6 +61,7 @@ class MainActivity : Activity() {
             textSize = 18f
             gravity = Gravity.CENTER
             setPadding(0, 12, 0, 12)
+            setTextColor(Color.rgb(30, 120, 60))
         }
 
         val pairButton = Button(this).apply {
@@ -70,30 +84,43 @@ class MainActivity : Activity() {
 
         val refresh = Button(this).apply {
             text = "تحديث الطابعات"
-            setOnClickListener { loadDevices() }
-        }val plansButton = Button(this).apply {
-    text = "خطط التفعيل والاشتراك"
-    setOnClickListener {
-        showPlans()
-    }
+            setOnClickListener {
+                requestBluetoothPermission()
+            }
+        }
+
+        val plansButton = Button(this).apply {
+            text = "خطط التفعيل والاشتراك"
+            setOnClickListener {
+                showPlans()
+            }
+        }
 
         devices = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
         }
-layout.addView(refresh)
-layout.addView(plansButton)
-layout.addView(devices)updateTrial()
+
+        layout.addView(title)
+        layout.addView(status)
+        layout.addView(trial)
+        layout.addView(pairButton)
+        layout.addView(printSettings)
+        layout.addView(refresh)
+        layout.addView(plansButton)
+        layout.addView(devices)
+
+        setContentView(layout)
     }
 
     private fun requestBluetoothPermission() {
-        if (Build.VERSION.SDK_INT >= 31 &&
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
             checkSelfPermission(
                 Manifest.permission.BLUETOOTH_CONNECT
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             requestPermissions(
                 arrayOf(Manifest.permission.BLUETOOTH_CONNECT),
-                100
+                bluetoothPermissionCode
             )
         } else {
             loadDevices()
@@ -106,14 +133,19 @@ layout.addView(devices)updateTrial()
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(
-            requestCode, permissions, grantResults
+            requestCode,
+            permissions,
+            grantResults
         )
 
-        if (requestCode == 100 &&
-            grantResults.isNotEmpty() &&
-            grantResults[0] == PackageManager.PERMISSION_GRANTED
-        ) {
-            loadDevices()
+        if (requestCode == bluetoothPermissionCode) {
+            if (grantResults.isNotEmpty() &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED
+            ) {
+                loadDevices()
+            } else {
+                status.text = "صلاحية البلوتوث مطلوبة"
+            }
         }
     }
 
@@ -131,14 +163,14 @@ layout.addView(devices)updateTrial()
                 return
             }
 
-            status.text = "الأجهزة المقترنة"
-
             val paired = adapter.bondedDevices
 
             if (paired.isEmpty()) {
-                status.text = "لا توجد طابعات مقترنة"
+                status.text = "لا توجد أجهزة مقترنة"
                 return
             }
+
+            status.text = "الأجهزة المقترنة"
 
             paired.forEach { device ->
                 val button = Button(this).apply {
@@ -182,8 +214,36 @@ layout.addView(devices)updateTrial()
         }
     }
 
+    private fun showPlans() {
+        val plans = arrayOf(
+            "تفعيل يومي",
+            "اشتراك شهري",
+            "اشتراك سنوي",
+            "تفعيل مدى الحياة"
+        )
+
+        AlertDialog.Builder(this)
+            .setTitle("اختر خطة التفعيل")
+            .setItems(plans) { _, which ->
+                val selected = plans[which]
+
+                AlertDialog.Builder(this)
+                    .setTitle(selected)
+                    .setMessage(
+                        "سيتم توفير الدفع والتفعيل لهذه الخطة لاحقًا."
+                    )
+                    .setPositiveButton("حسنًا", null)
+                    .show()
+            }
+            .setNegativeButton("إلغاء", null)
+            .show()
+    }
+
     override fun onResume() {
         super.onResume()
-        if (::trial.isInitialized) updateTrial()
+
+        if (::trial.isInitialized) {
+            updateTrial()
+        }
     }
 }
