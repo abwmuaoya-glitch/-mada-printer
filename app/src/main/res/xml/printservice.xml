@@ -1,6 +1,4 @@
-
+XML
 <?xml version="1.0" encoding="utf-8"?>
 <print-service
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:addPrintersActivity="com.madaprinter.MainActivity"
-    android:settingsActivity="com.madaprinter.MainActivity" />
+    xmlns:android="http://schemas.android.com/apk/res/android" />
