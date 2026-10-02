@@ -1,8 +1,10 @@
 package com.madaprinter
 
-import android.print.PrintJob
 import android.print.PrinterId
 import android.printservice.PrintJob
+import android.printservice.PrintService
+import android.printservice.PrinterDiscoverySession
+
 import android.printservice.PrintService
 import android.printservice.PrinterDiscoverySession
 
