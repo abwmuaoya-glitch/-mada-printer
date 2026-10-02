@@ -1,26 +1,26 @@
-
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
-    namespace = "com.madaprinter"
-    compileSdk = 35
+    namespace = "com.example.madaprinter"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.madaprinter"
-        minSdk = 23
-        targetSdk = 35
+        applicationId = "com.example.madaprinter"
+        minSdk = 24
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
     }
-}
-compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
 
-kotlinOptions {
-    jvmTarget = "17"
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
