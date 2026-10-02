@@ -5,9 +5,6 @@ import android.printservice.PrintJob
 import android.printservice.PrintService
 import android.printservice.PrinterDiscoverySession
 
-import android.printservice.PrintService
-import android.printservice.PrinterDiscoverySession
-
 class PrintJobService : PrintService() {
 
     override fun onCreatePrinterDiscoverySession(): PrinterDiscoverySession {
