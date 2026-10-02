@@ -1,26 +1,10 @@
-
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <uses-feature
-        android:name="android.hardware.bluetooth"
-        android:required="false" />
-
-    <uses-permission
-        android:name="android.permission.BLUETOOTH"
-        android:maxSdkVersion="30" />
-
-    <uses-permission
-        android:name="android.permission.BLUETOOTH_ADMIN"
-        android:maxSdkVersion="30" />
-
-    <uses-permission
-        android:name="android.permission.BLUETOOTH_CONNECT" />
+<manifest xmlns:android="http://android.com"
+    package="com.madaprinter">
 
     <application
-        android:allowBackup="false"
-        android:label="Mada Printer"
-        android:theme="@android:style/Theme.Material.Light.NoActionBar"
+        android:allowBackup="true"
+        android:label="MadaPrinter"
         android:supportsRtl="true">
 
         <activity
@@ -31,21 +15,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name=".PrintJobService"
-            android:permission="android.permission.BIND_PRINT_SERVICE"
-            android:exported="true"
-            android:label="Mada Printer">
-
-            <intent-filter>
-                <action android:name="android.printservice.PrintService" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.printservice"
-                android:resource="@xml/printservice" />
-        </service>
 
     </application>
 </manifest>
